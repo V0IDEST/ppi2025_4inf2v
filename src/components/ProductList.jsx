@@ -1,38 +1,18 @@
-import { useEffect, useState } from "react";
 import styles from "./ProductList.module.css";
 import { CircularProgress } from "@mui/material";
 import { Product } from "./Product";
+import { useContext } from "react";
+import { CartContext } from "../service/CartContext";
 
-export function ProductList({ addToCart }) {
-  var category = "beauty";
-  var limit = 12;
-  var apiUrl = `https://dummyjson.com/products/category/${category}?limit=${limit}&select=id,thumbnail,title,price,description`;
+export function ProductList() {
+  
+  const { products, loading, error } = useContext(CartContext);
 
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        setProducts(data.products);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    setTimeout(() => {
-      fetchProducts();
-    }, 100);
-  }, []);
   return (
     <div className={styles.container}>
       <div className={styles.grid}>
         {products.map((product) => (
-          <Product key={product.id} product={product} addToCart={addToCart} />
+          <Product key={product.id} product={product} />
         ))}
       </div>
       {loading && (
