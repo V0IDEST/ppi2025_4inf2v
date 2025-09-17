@@ -1,9 +1,9 @@
 .header {
   background-color: var(--gray-900);
   color: var(--primary);
-  padding: 1rem;
+  padding: 5rem;
   text-align: center;
-  height: 5rem;
+  height: 15rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,5 +19,31 @@
 .header a {
   color: var(--primary);
   text-decoration: none;
+}
+
+.header h1 {
+  font-size: 5rem;
+}
+
+.header p {
+  font-size: 2.4rem;
+  margin: 0;
+}
+
+.cart {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  gap: 1rem;
+}
+
+.cartCount {
+  background-color: var(--secondary);
+  color: var(--primary-contrast-dark);
+  border-radius: 50%;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  position: relative;
+  top: -0.5rem;
 }
 

@@ -4,7 +4,7 @@ import { Header } from "./components/Header";
 import { ProductList } from "./components/ProductList";
 import { Cart } from "./components/Cart";
 import { Route, Routes } from "react-router";
-import { CartProvider } from "./service/CartContext";
+import { CartProvider } from "./context/CartContext";
 
 export default function App() {
   return (

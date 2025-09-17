@@ -1,4 +1,5 @@
 import { useState, useEffect, createContext } from "react";
+import { supabase } from '../utils/supabase';
 
 export const CartContext = createContext({
   // Products and loading/error states
@@ -13,30 +14,40 @@ export const CartContext = createContext({
 });
 
 export function CartProvider({ children }) {
-  // Fetch products from the API
-  var category = "beauty";
-  var limit = 12;
-  var apiUrl = `https://dummyjson.com/products/category/${category}?limit=${limit}&select=id,thumbnail,title,price,description`;
-
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        setProducts(data.products);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
+    async function fetchProductsSupabase() {
+      const { data, error } = await supabase.from("product_2v").select();
+      if (error) {
+        setError(`Fetching products failed! ${error}`);
+      } else {
+        setProducts(data);
       }
+      setLoading(false);
     }
-    setTimeout(() => {
-      fetchProducts();
-    }, 100);
+    fetchProductsSupabase();
+    //   async function fetchProductsAPI() {
+    //     // Fetch products from the API
+    //     var category = "beauty";
+    //     var limit = 12;
+    //     var apiUrl = `https://dummyjson.com/products/category/${category}?limit=${limit}&select=id,thumbnail,title,price,description`;
+
+    //     try {
+    //       const response = await fetch(apiUrl);
+    //       const data = await response.json();
+    //       setProducts(data.products);
+    //     } catch (error) {
+    //       setError(error);
+    //     } finally {
+    //       setLoading(false);
+    //     }
+    //   }
+    //   setTimeout(() => {
+    //     fetchProductsAPI();
+    //   }, 100);
   }, []);
 
   // Cart state management
@@ -49,7 +60,7 @@ export function CartProvider({ children }) {
       // If it exists, update the quantity
       updateQtyCart(product.id, existingProduct.quantity + 1);
     } else {
-      setCart((prevCart) => [...prevCart, {...product, quantity: 1}]);
+      setCart((prevCart) => [...prevCart, { ...product, quantity: 1 }]);
     }
   }
 
@@ -78,8 +89,6 @@ export function CartProvider({ children }) {
   };
 
   return (
-    <CartContext.Provider value={context}>
-      {children}
-    </CartContext.Provider>
+    <CartContext.Provider value={context}>{children}</CartContext.Provider>
   );
 }

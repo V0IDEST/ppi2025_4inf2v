@@ -3,15 +3,15 @@
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  margin: 5rem 0;
+  margin: 15rem 0;
   gap: 2rem;
 }
 
 .grid {
   /* height: 100vh; */
-  padding: 1rem 3rem;
+  padding: 3rem 10rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
   grid-template-rows: repeat(auto-fit, min-content);
   gap: 3rem;
 

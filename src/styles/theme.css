@@ -5,6 +5,12 @@
   --primary-contrast-light: #ffffff;
   --primary-contrast-dark: #000000;
 
+  --secondary: #f0ad4e;
+  --secondary-light: #f7d6a0;
+  --secondary-dark: #c68600;  
+  --secondary-contrast-light: #ffffff;
+  --secondary-contrast-dark: #000000;
+
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
   --gray-200: #e5e7eb;
