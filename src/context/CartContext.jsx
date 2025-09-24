@@ -11,6 +11,14 @@ export const CartContext = createContext({
   addToCart: () => {},
   updateQtyCart: () => {},
   clearCart: () => {},
+  //User management
+  session: null,
+  sessionLoading: false,
+  sessionMessage: null,
+  sessionError: null,
+  handleSingUp: () => {},
+  handleSignIn: () => {},
+  handleSignOut: () => {},
 });
 
 export function CartProvider({ children }) {
@@ -76,16 +84,105 @@ export function CartProvider({ children }) {
     setCart([]);
   }
 
+  //User Session Management
+  const [session, setSession] = useState(null)
+  const [sessionLoading, setSessionLoading] = useState(false)
+  const [sessionMessage, setSessionMessage] = useState(null)
+  const [sessionError, setSessionError] = useState(null)
+
+  async function handleSingUp(email, password, username){
+    setSessionLoading(true);
+    setSessionError(null)
+    setSessionMessage(null)
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            username: username,
+            admin: false,
+          },
+          emailRedirectTo: `${window.location.origin}/signin`,
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.user) {
+        setSessionMessage("Registration successful! Check your email to confirm your account.")
+      };
+
+    } catch (error) {
+      setSessionError(error.message);
+    } finally {
+      setSessionLoading(false);
+    }
+  }
+
+  async function handleSignIn(email, password){
+    setSessionLoading(true);
+    setSessionError(null);
+    setSessionMessage(null);
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      
+      if (error) throw error;
+
+      if (data.session) {
+        setSession(data.session);
+        setSessionMessage("Sign in successful!")
+      }
+
+    } catch (error) {
+      setSessionError(error.message);
+    } finally {
+      setSessionLoading(false);
+    }
+  }
+
+  async function handleSignOut(){
+    setSessionLoading(true);
+    setSessionError(null);
+    setSessionMessage(null);
+
+    try {
+      const { error } = await supabase.auth.signOut();
+      
+      if (error) throw error;
+
+      setSession(null);
+      window.location.href = "/";
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setSessionLoading(false);
+    }
+  }
+
   const context = {
     //Products and loading/error states
     products: products,
     loading: loading,
     error: error,
-    //Cart management functions
+    //Cart management
     cart: cart,
     addToCart: addToCart,
     updateQtyCart: updateQtyCart,
     clearCart: clearCart,
+    //User management
+    session: session,
+    sessionLoading: sessionLoading,
+    sessionMessage: sessionMessage,
+    sessionError: sessionError,
+    handleSingUp: handleSingUp,
+    handleSignIn: handleSignIn,
+    handleSignOut: handleSignOut,
   };
 
   return (
