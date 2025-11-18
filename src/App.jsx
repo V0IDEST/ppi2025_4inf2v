@@ -7,11 +7,13 @@ import { Route, Routes } from "react-router";
 import { CartProvider } from "./context/CartContext";
 import { User } from "./components/User";
 import { Login } from "./components/Login";
+import { SessionProvider } from "./context/SessionContext";
 
 export default function App() {
   return (
     // React Fragment
     <>
+      <SessionProvider>
       <CartProvider>
         <Header />
         <Routes>
@@ -23,6 +25,7 @@ export default function App() {
           {/* Add more routes as needed */}
         </Routes>
       </CartProvider>
+      </SessionProvider>
     </>
   );
 }

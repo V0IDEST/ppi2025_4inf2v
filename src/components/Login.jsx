@@ -1,12 +1,12 @@
 import styles from "./Login.module.css";
 import { useState, useContext, useEffect } from "react";
-import { CartContext } from "../context/CartContext";
 import { Field } from "@base-ui-components/react/field";
 import { Form } from "@base-ui-components/react/form";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { toast, Bounce } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router";
+import { SessionContext } from "../context/SessionContext";
 
 export function Login({ value }) {
   // User Context
@@ -17,7 +17,7 @@ export function Login({ value }) {
     sessionLoading,
     sessionMessage,
     sessionError,
-  } = useContext(CartContext);
+  } = useContext(SessionContext);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -28,7 +28,7 @@ export function Login({ value }) {
 
   const [errors, setErrors] = useState({});
   // const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState(value); // "signin" or "register"
+  const [mode, setMode] = useState("signin"); // "signin" or "register"
   const [showPassword, setShowPassword] = useState(false);
   const [formValues, setFormValues] = useState({
     email: "",
@@ -38,8 +38,8 @@ export function Login({ value }) {
   });
 
   useEffect(() => {
-    setMode(value);
-  }, [value]);
+    setMode("signin");
+  }, ["sign in"]);
 
   useEffect(() => {
     // Monitor changes in sessionMessage and sessionError
@@ -90,13 +90,8 @@ export function Login({ value }) {
     e.preventDefault();
 
     // Basic validation
-    // TODO: Fazer validação com REGEX
     const newErrors = {};
     if (!formValues.email) newErrors.email = "Email is required";
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (formValues.email && !emailRegex.test(formValues.email)) {
-      newErrors.email = "Invalid email format";
-    }
     if (!formValues.password) newErrors.password = "Password is required";
     if (mode === "register") {
       if (!formValues.username) newErrors.username = "Username is required";
@@ -110,6 +105,7 @@ export function Login({ value }) {
 
     if (mode === "signin") {
       handleSignIn(formValues.email, formValues.password);
+      console.log("handle submit sign in");
     } else {
       handleSignUp(formValues.email, formValues.password, formValues.username);
     }

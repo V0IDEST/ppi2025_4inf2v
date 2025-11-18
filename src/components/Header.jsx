@@ -27,8 +27,8 @@ export function Header() {
             <Link to="/signin" className={styles.link}>
               Sign In
             </Link>
-            <Link to="/register" className={styles.link}>
-              Register
+            <Link to="/user" className={styles.link}>
+              Count
             </Link>
           </>
         )}
